@@ -1,3 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #fff;
+  color: #000;
+  min-height: 100vh;
+}
+
+table {
+  border-collapse: collapse;
+}

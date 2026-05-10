@@ -1,0 +1,120 @@
+<h1>Tasks</h1>
+<div class="actions-container">
+  <button class="add-btn" (click)="openCreate()">+ New Task</button>
+</div>
+<div class="toolbar">
+  <app-filter-bar (filtersChanged)="onFiltersChanged($event)" />
+</div>
+
+@if (loading()) {
+<p class="loading-text">Loading...</p>
+}
+
+<table>
+  <thead>
+    <tr>
+      <th (click)="setSort('title')" class="sortable">Title</th>
+      <th>Description</th>
+      <th (click)="setSort('status')" class="sortable">Status</th>
+      <th (click)="setSort('priority')" class="sortable">Priority</th>
+      <th (click)="setSort('dueDate')" class="sortable">Due Date</th>
+      <th>Assigned To</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (task of tasks(); track task.id) {
+    <tr>
+      <td>{{ task.title }}</td>
+      <td>{{ task.description }}</td>
+      <td>
+        <select [value]="task.status" (change)="onStatusChange(task, $event)">
+          @for (s of statuses; track s) {
+          <option [value]="s">{{ statusLabels[s] }}</option>
+          }
+        </select>
+      </td>
+      <td [class]="'priority-' + task.priority.toLowerCase()">{{ priorityLabels[task.priority] }}</td>
+      <td>{{ task.dueDate | date:'dd/MM/yyyy' }}</td>
+      <td>{{ task.assignedUser }}</td>
+      <td>
+        <button class="edit-btn" (click)="openEdit(task)">Edit</button>
+      </td>
+    </tr>
+    } @empty {
+    <tr>
+      <td colspan="7" class="empty-row">No tasks found</td>
+    </tr>
+    }
+  </tbody>
+</table>
+
+<div class="pagination">
+  <button [disabled]="currentPage === 1" (click)="changePage(-1)">Previous</button>
+  <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+  <button [disabled]="currentPage >= totalPages()" (click)="changePage(1)">Next</button>
+</div>
+
+@if (showForm()) {
+<div class="popup-overlay" (click)="closeForm()">
+  <div class="popup" (click)="$event.stopPropagation()">
+    <h2>{{ editingTask() ? 'Edit Task' : 'New Task' }}</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="field">
+        <label>Title *</label>
+        <input type="text" formControlName="title" />
+        @if (hasError('title')) {
+        <span class="error">Title is required (min 3 chars)</span>
+        }
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <textarea formControlName="description" rows="3"></textarea>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Status *</label>
+          <select formControlName="status">
+            @for (s of statuses; track s) {
+            <option [value]="s">{{ statusLabels[s] }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label>Priority *</label>
+          <select formControlName="priority">
+            @for (p of priorities; track p) {
+            <option [value]="p">{{ priorityLabels[p] }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Due Date *</label>
+          <input type="date" formControlName="dueDate" />
+          @if (hasError('dueDate')) {
+          <span class="error">Due date is required</span>
+          }
+        </div>
+        <div class="field">
+          <label>Assigned To *</label>
+          <input type="text" formControlName="assignedUser" />
+          @if (hasError('assignedUser')) {
+          <span class="error">Assigned user is required</span>
+          }
+        </div>
+      </div>
+
+      <div class="popup-actions">
+        <button type="button" class="cancel-btn" (click)="closeForm()">Cancel</button>
+        <button type="submit" class="submit-btn">{{ editingTask() ? 'Update' : 'Create' }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+}

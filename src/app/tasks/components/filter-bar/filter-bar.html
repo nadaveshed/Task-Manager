@@ -1,0 +1,18 @@
+<div class="filters">
+  <select [(ngModel)]="priority" (ngModelChange)="onFilterChange()">
+    <option value="">All Priorities</option>
+    @for (p of priorities; track p) {
+    <option [value]="p">{{ priorityLabels[p] }}</option>
+    }
+  </select>
+
+  <label>From</label>
+  <input type="date" [(ngModel)]="dueDateFrom" (ngModelChange)="onFilterChange()" [max]="dueDateTo" />
+
+  <label>To</label>
+  <input type="date" [(ngModel)]="dueDateTo" (ngModelChange)="onFilterChange()" [min]="dueDateFrom" />
+
+  @if (priority || dueDateFrom || dueDateTo) {
+  <button class="clear-btn" (click)="clearFilters()">Clear</button>
+  }
+</div>
