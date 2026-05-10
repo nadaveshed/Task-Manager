@@ -1,59 +1,66 @@
-# Client
+# Task Manager
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.9.
+A full-stack Task Management project built with Angular and Node.js, using SQLite and Prisma as the database.
 
-## Development server
+## Architecture & Tech Stack
 
-To start a local development server, run:
+- **Frontend**: Angular 18, Signals, RxJS, Tailwind CSS.
+- **Backend**: Node.js, Express, TypeScript.
+- **Database**: SQLite with Prisma.
 
-```bash
-ng serve
-```
+## Prerequisites
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Node.js (v18 or higher)
+- npm
 
-## Code scaffolding
+## How to Run
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### 1. Backend Setup
 
-```bash
-ng generate component component-name
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/task-manager-pro.git
+   ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+2. Install the dependencies for the server:
+   ```bash
+   cd server && npm install
+   ```
 
-```bash
-ng generate --help
-```
+2. Create a `.env` file in the `server` directory:
+   ```env
+   DATABASE_URL="file:./dev.db"
+   ```
 
-## Building
+3. Initialize the SQLite database and Prisma client:
+   ```bash
+   npx prisma db push
+   ```
+4. Start the server:
+   ```bash
+   npm start
+   ```
+   *The server runs on http://localhost:3000*
 
-To build the project run:
+### 2. Frontend Setup
 
-```bash
-ng build
-```
+1. Open a **new** terminal and navigate to the `client` directory:
+   ```bash
+   cd client
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the Angular application:
+   ```bash
+   npm start
+   ```
+   *The frontend runs on http://localhost:4200*
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## API Endpoints
+- `GET /api/tasks` - Retrieve tasks (supports `?page`, `?pageSize`, `?sortBy`, `?status`)
+- `POST /api/tasks` - Create a new task
+- `PUT /api/tasks/:id` - Update a task
+- `PATCH /api/tasks/:id/status` - Update task status
+- `DELETE /api/tasks/:id` - Delete a task
